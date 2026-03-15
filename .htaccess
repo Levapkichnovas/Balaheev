@@ -1,0 +1,86 @@
+# ============================================================
+#  Серверная конфигурация (Apache)
+# ============================================================
+
+# Страница ошибки 404
+ErrorDocument 404 /404.html
+
+# ── БЕЗОПАСНОСТЬ ──────────────────────────────────────────
+<IfModule mod_headers.c>
+    # Защита от MIME-sniffing
+    Header set X-Content-Type-Options "nosniff"
+    # Защита от clickjacking (встраивание в iframe)
+    Header set X-Frame-Options "DENY"
+    # Контроль отправки реферера
+    Header set Referrer-Policy "strict-origin-when-cross-origin"
+    # Запрет камеры, микрофона, геолокации
+    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# ── HTTPS РЕДИРЕКТ ────────────────────────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
+
+# ── БЛОКИРОВКА ДОСТУПА К СЛУЖЕБНЫМ ФАЙЛАМ ─────────────────
+<Files "google-apps-script.js">
+    Order allow,deny
+    Deny from all
+</Files>
+
+<Files ".htaccess">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Блокировка config.js от прямого открытия в браузере (через script-тег загрузится)
+<Files "config.js">
+    <IfModule mod_rewrite.c>
+        RewriteEngine On
+        RewriteCond %{HTTP_REFERER} !^https?://%{HTTP_HOST} [NC]
+        RewriteRule ^config\.js$ - [F,L]
+    </IfModule>
+</Files>
+
+# ── ЗАЩИТА ОТ HOTLINKING (кража картинок) ─────────────────
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_REFERER} !^$ [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://%{HTTP_HOST} [NC]
+    RewriteRule \.(jpg|jpeg|png|gif|webp|svg)$ - [F,NC]
+</IfModule>
+
+# ── БЛОКИРОВКА СКАНЕРОВ И ВРЕДОНОСНЫХ БОТОВ ───────────────
+<IfModule mod_rewrite.c>
+    RewriteCond %{HTTP_USER_AGENT} (HTTrack|WebCopier|WebZIP|Teleport|SiteSnagger|wget|curl|libwww) [NC]
+    RewriteRule .* - [F,L]
+</IfModule>
+
+# ── ЗАПРЕТ ЛИСТИНГА ДИРЕКТОРИЙ ────────────────────────────
+Options -Indexes
+
+# ── СЖАТИЕ (GZIP) ────────────────────────────────────────
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# ── КЭШИРОВАНИЕ СТАТИКИ ──────────────────────────────────
+<IfModule mod_expires.c>
+    ExpiresActive on
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType font/woff2 "access plus 1 year"
+    ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# ── ПРИНУДИТЕЛЬНАЯ КОДИРОВКА UTF-8 ───────────────────────
+AddDefaultCharset UTF-8
+
+# ── СКРЫТИЕ ВЕРСИИ СЕРВЕРА ───────────────────────────────
+ServerSignature Off

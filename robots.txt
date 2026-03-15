@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://balaheev-bur.ru/sitemap.xml
