@@ -49,29 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
 
-    // ── КАЛЬКУЛЯТОР ──────────────────────────────────────────
-    var depthSlider = document.getElementById('depthSlider');
-    var depthValText = document.getElementById('depthValText');
-    var pipeSelect = document.getElementById('pipeSelect');
-    var equipSelect = document.getElementById('equipSelect');
-    var priceTotal = document.getElementById('priceTotal');
-
-    function calculatePrice() {
-        var depth = parseInt(depthSlider.value);
-        var pricePerMeter = parseInt(pipeSelect.value);
-        var equipPrice = parseInt(equipSelect.value);
-
-        depthValText.innerText = depth + ' метров';
-        var total = (depth * pricePerMeter) + equipPrice;
-        priceTotal.innerHTML = total.toLocaleString('ru-RU') + ' <span>₽</span>';
-    }
-
-    depthSlider.addEventListener('input', calculatePrice);
-    pipeSelect.addEventListener('change', calculatePrice);
-    equipSelect.addEventListener('change', calculatePrice);
-    calculatePrice();
-
-
     // ── МАСКА ТЕЛЕФОНА ───────────────────────────────────────
     var phoneInput = document.getElementById('userPhone');
     phoneInput.addEventListener('input', function(e) {
@@ -118,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (honeypot && honeypot.value !== '') {
             btn.innerText = 'Заявка отправлена!';
             btn.style.backgroundColor = '#28a745';
-            setTimeout(function() { btn.innerText = 'Получить расчет'; btn.style.backgroundColor = ''; }, 4000);
+            setTimeout(function() { btn.innerText = 'Отправить заявку'; btn.style.backgroundColor = ''; }, 4000);
             return;
         }
 
@@ -181,7 +158,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             setTimeout(function() {
-                btn.innerText = 'Получить расчет';
+                btn.innerText = 'Отправить заявку';
                 btn.style.backgroundColor = '';
                 btn.disabled = false;
             }, 4000);
