@@ -31,6 +31,88 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('%cДанный сайт защищён авторским правом ИП Балахеев Ю.Б.\nНесанкционированное копирование преследуется по закону.', 'font-size:14px;color:#333;');
 
 
+    // ── АНИМАЦИИ ПРИ СКРОЛЛЕ (Intersection Observer) ────────
+    var animElements = document.querySelectorAll('.animate-on-scroll');
+    if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.15 });
+        animElements.forEach(function(el) { observer.observe(el); });
+    } else {
+        animElements.forEach(function(el) { el.classList.add('visible'); });
+    }
+
+
+    // ── СЧЁТЧИК ЦИФР ──────────────────────────────────────
+    var countersStarted = false;
+    var counterSection = document.querySelector('.counter-section');
+
+    function animateCounters() {
+        if (countersStarted) return;
+        countersStarted = true;
+        document.querySelectorAll('.counter-number').forEach(function(counter) {
+            var target = parseInt(counter.getAttribute('data-target'));
+            var duration = 2000;
+            var start = 0;
+            var startTime = null;
+            function step(timestamp) {
+                if (!startTime) startTime = timestamp;
+                var progress = Math.min((timestamp - startTime) / duration, 1);
+                var eased = 1 - Math.pow(1 - progress, 3);
+                counter.innerText = Math.floor(eased * target);
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    counter.innerText = target + '+';
+                }
+            }
+            requestAnimationFrame(step);
+        });
+    }
+
+    if (counterSection && 'IntersectionObserver' in window) {
+        var counterObserver = new IntersectionObserver(function(entries) {
+            if (entries[0].isIntersecting) {
+                animateCounters();
+                counterObserver.unobserve(counterSection);
+            }
+        }, { threshold: 0.3 });
+        counterObserver.observe(counterSection);
+    }
+
+
+    // ── ШАПКА: УМЕНЬШЕНИЕ ПРИ СКРОЛЛЕ ─────────────────────
+    var header = document.querySelector('.header');
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+    });
+
+
+    // ── КНОПКА НАВЕРХ ──────────────────────────────────────
+    var scrollTopBtn = document.getElementById('scrollTopBtn');
+    if (scrollTopBtn) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 500) {
+                scrollTopBtn.classList.add('visible');
+            } else {
+                scrollTopBtn.classList.remove('visible');
+            }
+        });
+        scrollTopBtn.addEventListener('click', function() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+
+
     // ── ГАМБУРГЕР-МЕНЮ ───────────────────────────────────────
     var hamburger = document.getElementById('hamburgerBtn');
     var navMenu = document.querySelector('.nav-menu');
