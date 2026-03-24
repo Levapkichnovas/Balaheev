@@ -156,6 +156,9 @@ img { max-width: 100%; height: auto; }
     .footer-grid { grid-template-columns: 1fr; gap: 25px; }
 }
 
+/* Смещение якорей под sticky-шапку */
+section[id] { scroll-margin-top: 90px; }
+
 /* ================= ПЕРВЫЙ ЭКРАН (HERO) ================= */
 .hero {
     position: relative;
