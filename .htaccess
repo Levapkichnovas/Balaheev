@@ -1,20 +1,18 @@
 # ============================================================
-#  Серверная конфигурация (Apache)
+#  Серверная конфигурация (Apache) — burim03.ru
 # ============================================================
 
 # Страница ошибки 404
 ErrorDocument 404 /404.html
 
-# ── БЕЗОПАСНОСТЬ ──────────────────────────────────────────
+# ── БЕЗОПАСНОСТЬ (HTTP-заголовки) ─────────────────────────
+# HSTS не дублируем — reg.ru отдаёт Strict-Transport-Security сам
 <IfModule mod_headers.c>
-    # Защита от MIME-sniffing
-    Header set X-Content-Type-Options "nosniff"
-    # Защита от clickjacking (встраивание в iframe)
-    Header set X-Frame-Options "DENY"
-    # Контроль отправки реферера
-    Header set Referrer-Policy "strict-origin-when-cross-origin"
-    # Запрет камеры, микрофона, геолокации
-    Header set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Content-Security-Policy "default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:; form-action 'self'; base-uri 'self'; frame-ancestors 'self'; frame-src 'none'; object-src 'none';"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
 </IfModule>
 
 # ── HTTPS РЕДИРЕКТ ────────────────────────────────────────
@@ -24,36 +22,46 @@ ErrorDocument 404 /404.html
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 </IfModule>
 
-# ── БЛОКИРОВКА ДОСТУПА К СЛУЖЕБНЫМ ФАЙЛАМ ─────────────────
-<Files "google-apps-script.js">
+# ── .well-known (Let's Encrypt ACME) ──────────────────────
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule "^\.well-known/" - [L]
+</IfModule>
+
+# ── БЛОКИРОВКА ДОСТУПА К СКРЫТЫМ ФАЙЛАМ ───────────────────
+<FilesMatch "^\.">
     Order allow,deny
     Deny from all
-</Files>
+</FilesMatch>
 
-<Files ".htaccess">
+# ── БЛОКИРОВКА СЛУЖЕБНЫХ РАСШИРЕНИЙ ───────────────────────
+<FilesMatch "\.(log|bak|sql|ini|sh|env|yml|yaml|md)$">
     Order allow,deny
     Deny from all
-</Files>
+</FilesMatch>
 
-# Блокировка config.js от прямого открытия в браузере (через script-тег загрузится)
-<Files "config.js">
-    <IfModule mod_rewrite.c>
-        RewriteEngine On
-        RewriteCond %{HTTP_REFERER} !^https?://%{HTTP_HOST} [NC]
-        RewriteRule ^config\.js$ - [F,L]
+# ── send.php: только POST, без индексации, без кэша ───────
+<Files "send.php">
+    <LimitExcept POST>
+        Order allow,deny
+        Deny from all
+    </LimitExcept>
+    <IfModule mod_headers.c>
+        Header always set X-Robots-Tag "noindex, nofollow"
+        Header always set Cache-Control "no-store, no-cache, must-revalidate"
     </IfModule>
 </Files>
 
-# ── ЗАЩИТА ОТ HOTLINKING (кража картинок) ─────────────────
+# ── ЗАЩИТА ОТ HOTLINKING ──────────────────────────────────
 <IfModule mod_rewrite.c>
     RewriteCond %{HTTP_REFERER} !^$ [NC]
     RewriteCond %{HTTP_REFERER} !^https?://%{HTTP_HOST} [NC]
     RewriteRule \.(jpg|jpeg|png|gif|webp|svg)$ - [F,NC]
 </IfModule>
 
-# ── БЛОКИРОВКА СКАНЕРОВ И ВРЕДОНОСНЫХ БОТОВ ───────────────
+# ── БЛОКИРОВКА ВРЕДОНОСНЫХ UA ─────────────────────────────
 <IfModule mod_rewrite.c>
-    RewriteCond %{HTTP_USER_AGENT} (HTTrack|WebCopier|WebZIP|Teleport|SiteSnagger|wget|curl|libwww) [NC]
+    RewriteCond %{HTTP_USER_AGENT} (HTTrack|WebCopier|WebZIP|Teleport|SiteSnagger|wget|libwww) [NC]
     RewriteRule .* - [F,L]
 </IfModule>
 
@@ -62,14 +70,23 @@ Options -Indexes
 
 # ── СЖАТИЕ (GZIP) ────────────────────────────────────────
 <IfModule mod_deflate.c>
-    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json image/svg+xml
 </IfModule>
 
-# ── КЭШИРОВАНИЕ СТАТИКИ ──────────────────────────────────
+# ── КЭШ СТАТИКИ ───────────────────────────────────────────
+<IfModule mod_headers.c>
+    <FilesMatch "\.(woff2|woff|ttf|otf)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    <FilesMatch "\.(css|js|svg|png|jpg|jpeg|webp|avif|ico)$">
+        Header set Cache-Control "public, max-age=2592000"
+    </FilesMatch>
+</IfModule>
+
 <IfModule mod_expires.c>
     ExpiresActive on
-    ExpiresByType text/css "access plus 1 year"
-    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
     ExpiresByType image/svg+xml "access plus 1 year"
     ExpiresByType image/x-icon "access plus 1 year"
     ExpiresByType image/jpeg "access plus 1 month"
@@ -79,7 +96,7 @@ Options -Indexes
     ExpiresByType text/html "access plus 0 seconds"
 </IfModule>
 
-# ── ПРИНУДИТЕЛЬНАЯ КОДИРОВКА UTF-8 ───────────────────────
+# ── КОДИРОВКА ────────────────────────────────────────────
 AddDefaultCharset UTF-8
 
 # ── СКРЫТИЕ ВЕРСИИ СЕРВЕРА ───────────────────────────────

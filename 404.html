@@ -3,22 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:; form-action 'self'; base-uri 'self'; frame-ancestors 'self';">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Страница не найдена | ИП Балахеев Ю.Б.</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'><rect x='23' y='5' width='4' height='35' rx='1' fill='%23005b9f'/><rect x='19' y='5' width='12' height='4' rx='1' fill='%23005b9f'/><polygon points='22,40 25,48 28,40' fill='%23ff7a00'/><rect x='15' y='42' width='20' height='4' rx='2' fill='%23005b9f' opacity='0.4'/></svg>">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Inter', Arial, sans-serif; background: #f8f9fa; display: flex; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; color: #222; }
+        body { font-family: 'Inter', Arial, sans-serif; background: #f8f9fa; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; text-align: center; padding: 20px; color: #222; }
         .error-box h1 { font-size: 120px; font-weight: 800; color: #005b9f; line-height: 1; }
         .error-box p { font-size: 18px; color: #666; margin: 15px 0 30px; }
-        .error-box a { display: inline-block; background: #ff7a00; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background 0.3s; }
-        .error-box a:hover { background: #e66e00; }
+        .error-box a.home-btn { display: inline-block; background: #ff7a00; color: #fff; padding: 14px 28px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px; transition: background 0.3s; }
+        .error-box a.home-btn:hover { background: #e66e00; }
+        .err-footer { margin-top: 40px; font-size: 12px; color: #888; }
+        .err-footer a { color: #005b9f; text-decoration: none; margin: 0 8px; }
+        .err-footer a:hover { text-decoration: underline; }
     </style>
 </head>
 <body>
     <div class="error-box">
         <h1>404</h1>
         <p>Страница не найдена. Возможно, она была удалена или вы ввели неверный адрес.</p>
-        <a href="/">Вернуться на главную</a>
+        <a href="/" class="home-btn">Вернуться на главную</a>
+    </div>
+    <div class="err-footer">
+        <p>© 2026 ИП Балахеев Ю.Б. · ОГРНИП 314032709100057 · ИНН 032624006045</p>
+        <p style="margin-top:8px;">
+            <a href="/privacy.html">Политика конфиденциальности</a>
+            ·
+            <a href="/terms.html">Пользовательское соглашение</a>
+        </p>
     </div>
 </body>
 </html>

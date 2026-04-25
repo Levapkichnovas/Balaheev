@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
     <title>Бурение скважин | Инженерно-геологические изыскания | ИП Балахеев Ю.Б.</title>
 
     <!-- SEO мета-теги -->
@@ -14,21 +17,16 @@
     <meta property="og:title" content="Бурение скважин | Инженерно-геологические изыскания | ИП Балахеев">
     <meta property="og:description" content="Бурение скважин на инженерно-геологических изысканиях, геолого-разведке и на рассыпное золото. Собственная техника УРБ-2а/2.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://example.com/">
+    <meta property="og:url" content="https://www.burim03.ru/">
     <meta property="og:locale" content="ru_RU">
 
     <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https://images.unsplash.com data:; connect-src https://api.telegram.org https://script.google.com https://api.emailjs.com; frame-src 'none'; object-src 'none'; base-uri 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; connect-src 'self'; img-src 'self' data:; form-action 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; frame-ancestors 'self';">
 
     <!-- Favicon (SVG буровая) -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 50 50'><rect x='23' y='5' width='4' height='35' rx='1' fill='%23005b9f'/><rect x='19' y='5' width='12' height='4' rx='1' fill='%23005b9f'/><polygon points='22,40 25,48 28,40' fill='%23ff7a00'/><rect x='15' y='42' width='20' height='4' rx='2' fill='%23005b9f' opacity='0.4'/></svg>">
 
-    <!-- Шрифт Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-    <link rel="stylesheet" href="style.css?v=2.0">
+    <link rel="stylesheet" href="style.css?v=3.0">
 
     <!-- Schema.org LocalBusiness -->
     <script type="application/ld+json">
@@ -46,7 +44,7 @@
             "addressCountry": "RU"
         },
         "openingHours": "Mo-Su 08:00-20:00",
-        "url": "https://example.com/"
+        "url": "https://www.burim03.ru/"
     }
     </script>
 </head>
@@ -135,15 +133,16 @@
                 <form id="topForm">
                     <!-- Honeypot (скрытое поле для защиты от ботов) -->
                     <div style="position:absolute;left:-9999px;" aria-hidden="true">
-                        <input type="text" name="website" id="honeypotField" tabindex="-1" autocomplete="off">
+                        <input type="text" name="hp_field" tabindex="-1" autocomplete="off">
                     </div>
-                    <input type="text" id="userName" class="input-field" placeholder="Ваше имя" maxlength="50" required>
-                    <input type="tel" id="userPhone" class="input-field" placeholder="Ваш телефон (+7...)" maxlength="18" required>
+                    <input type="text" id="userName" name="name" class="input-field" placeholder="Ваше имя" maxlength="50" required>
+                    <input type="tel" id="userPhone" name="phone" class="input-field" placeholder="Ваш телефон (+7...)" maxlength="18" required>
                     <label class="consent-label">
                         <input type="checkbox" id="consentCheckbox" required>
-                        <span>Я даю <a href="privacy.html" target="_blank">согласие на обработку персональных данных</a> в соответствии с ФЗ-152</span>
+                        <span>Я даю <a href="privacy.html" target="_blank" rel="noopener noreferrer">согласие на обработку персональных данных</a> в соответствии с ФЗ-152</span>
                     </label>
                     <button type="submit" class="btn btn-block">Отправить заявку</button>
+                    <div class="form-success" data-original="Спасибо! Мы свяжемся с вами в ближайшее время."></div>
                 </form>
             </div>
         </div>
@@ -309,16 +308,16 @@
                 <p style="font-size: 12px; margin-top: 8px; color: #888;">ОГРНИП: 314032709100057 | ИНН: 032624006045</p>
                 <p style="font-size: 12px; margin-top: 4px; color: #888;">Адрес: Республика Бурятия, г. Улан-Удэ</p>
                 <p style="font-size: 12px; margin-top: 8px; color: #666;">Информация на сайте носит информационный характер и не является публичной офертой.</p>
-                <p style="font-size: 12px; margin-top: 4px;"><a href="privacy.html" style="color: #a0aab5;">Политика конфиденциальности</a></p>
+                <p style="font-size: 12px; margin-top: 4px;">
+                    <a href="privacy.html" style="color: #a0aab5;">Политика конфиденциальности</a>
+                    <span style="color:#555;"> &middot; </span>
+                    <a href="terms.html" style="color: #a0aab5;">Пользовательское соглашение</a>
+                </p>
             </div>
         </div>
     </footer>
 
-    <!-- EmailJS SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" async></script>
-    <!-- Настройки уведомлений -->
-    <script src="config.js?v=1.0"></script>
     <!-- Основной скрипт -->
-    <script src="script.js?v=2.0"></script>
+    <script src="script.js?v=3.0"></script>
 </body>
 </html>

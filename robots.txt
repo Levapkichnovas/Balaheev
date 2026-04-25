@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
-Sitemap: https://example.com/sitemap.xml
+Disallow: /send.php
+Sitemap: https://www.burim03.ru/sitemap.xml

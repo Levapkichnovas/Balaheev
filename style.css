@@ -1,3 +1,42 @@
+/* ================= ЛОКАЛЬНЫЙ ШРИФТ INTER ================= */
+/* Inter v20, subsets cyrillic + latin (merged), лежит в /fonts/ */
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 300;
+    font-display: swap;
+    src: url('fonts/inter-300.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('fonts/inter-regular.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url('fonts/inter-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('fonts/inter-700.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url('fonts/inter-800.woff2') format('woff2');
+}
+
 /* ================= ПЕРЕМЕННЫЕ (ЦВЕТА И СТИЛИ) ================= */
 :root {
     --primary-blue: #005b9f;      /* Фирменный синий */
@@ -356,6 +395,30 @@ section[id] { scroll-margin-top: 90px; }
 .consent-label input[type="checkbox"] { margin-top: 2px; flex-shrink: 0; width: 16px; height: 16px; cursor: pointer; accent-color: var(--primary-blue); }
 .consent-label a { color: var(--primary-blue); text-decoration: underline; }
 .consent-label a:hover { color: var(--action-orange); }
+
+.form-success {
+    margin-top: 12px;
+    padding: 10px 14px;
+    background: #e7f5ec;
+    color: #1e6b3a;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0;
+    max-height: 0;
+    overflow: hidden;
+    transform: translateY(-4px);
+    transition: opacity 0.25s ease, max-height 0.25s ease, transform 0.25s ease;
+}
+.form-success.show {
+    opacity: 1;
+    max-height: 120px;
+    transform: translateY(0);
+}
+.form-success.error {
+    background: #fdecec;
+    color: #a11f1f;
+}
 
 /* ================= СЧЁТЧИК (ЦИФРЫ) ================= */
 .counter-section {
